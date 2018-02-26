@@ -122,7 +122,8 @@ for fileName in process.source.fileNames:
 	elif "Run2016" in fileName:
 		process.GlobalTag.globaltag = '80X_dataRun2_2016SeptRepro_v6'
 	else:
-		process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2_v1'
+		#process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2_v1'
+		process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'
 		isMC = True
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
@@ -264,9 +265,19 @@ for cut_name, Selection in cuts.iteritems():
         # not the ones passed into the LeptonProducer to set cutFor above.
         if cut_name == 'Simple':
             alldil.electron_cut_mask = cms.uint32(0)
-            alldil.loose_cut = 'isGlobalMuon && pt > 20.'
-            alldil.tight_cut = ''
-            dil.max_candidates = 100
+            #alldil.loose_cut = 'isGlobalMuon && pt > 20.'
+            #alldil.tight_cut = ''
+            alldil.loose_cut = 'isGlobalMuon && '\
+				'pt > 53 && '\
+				'abs(eta) < 2.4 && ' \
+				'abs(dB) < 0.2 && ' \
+				'isolationR03.sumPt / innerTrack.pt < 0.10 && ' \
+				'globalTrack.hitPattern.trackerLayersWithMeasurement > 5 && ' \
+				'globalTrack.hitPattern.numberOfValidPixelHits > 0 && ' \
+				'globalTrack.hitPattern.numberOfValidMuonHits > 0 && ' \
+				'numberOfMatchedStations > 1'
+	    alldil.tight_cut = trigger_match
+	    dil.max_candidates = 100
             dil.sort_by_pt = True
             dil.do_remove_overlap = False
             if hasattr(dil, 'back_to_back_cos_angle_min'):
