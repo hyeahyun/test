@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 
-Electrons = False
+#Electrons = False
+Electrons = True
 
 import sys, os, FWCore.ParameterSet.Config as cms
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import switch_hlt_process_name
@@ -215,8 +216,10 @@ for cut_name, Selection in cuts.iteritems():
     # any of the muons. The cutFor flag actually gets ignored by the
     # LooseTightPairSelector in use for all the cuts above, at
     # present
-    path_list.append(process.egmGsfElectronIDSequence)
-	    
+    #path_list.append(process.egmGsfElectronIDSequence)
+    process.load("RecoEgamma.ElectronIdentification.heepIdVarValueMapProducer_cfi")
+    path_list.append(process.heepIDVarValueMaps * process.egmGsfElectronIDSequence)
+	
    
     leptons_name = cut_name + 'Leptons'
     if cut_name == 'Simple':
