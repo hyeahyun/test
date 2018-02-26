@@ -1,8 +1,10 @@
 
+//This is a method for background sample ntuple production on di-electron channel and e-mu channel.
 
-cmsrel CMSSW_8_0_20
 
-cd CMSSW_8_0_20/src
+cmsrel CMSSW_8_0_25
+
+cd CMSSW_8_0_25/src
 
 cmsenv
 
@@ -10,20 +12,25 @@ git clone git@github.com:hyeahyun/test.git
 
 mv pest/SUSYBSMAnalysis SUSYBSMAnalysis
  
-scram b -j 4
+scram b -j 16
+
+cd ../..
+
+scram p -n CMSSW_8025_emu CMSSW_8_0_25
+
+cd CMSSW_8025_emu/src
+
+cmsenv
+
+git cms-merge-topic Sam-Harper:HEEPV70VID
+
+cp -r _your_path_for_SUSYBSMAnalysis_Zprime2muAnalysis_/SUSYBSMAnalysis .
+
+scram b -j 16
 
 cd SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison
 
-////////////////////////// If signal.. /////////////////////////////////
 
-// After changing the sample pile path in the histosSimplified.py file,
-
-cmsRun histosSimplified.py
-
-// The zp2mu_histos.root file is created.
-
-
-////////////////////////// If background.. /////////////////////////////////
 
 //DY Dataset: /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM
 
@@ -44,4 +51,4 @@ crab submit -c crabConfig.py
 
 crab submit -c crabConfig_TT.py
 
-
+//In the generated ntuple files, the tree for the di-muon channel is SimpleNtupler/t and the tree for the e-mu channel is SimpleNtuplerEmu/t.
